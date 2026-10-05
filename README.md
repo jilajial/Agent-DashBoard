@@ -13,19 +13,19 @@ Node.js **22.13+**. The project intentionally has no npm runtime dependencies.
 ## Start the Hub (Windows controller)
 
 1. Download or clone this repository on Windows 10.
-2. Run `scripts\start-hub.bat`.
-3. The first start creates `packages/hub/config/hub.local.json`.
-4. Open `http://127.0.0.1:3000`.
+2. Double-click **`START-DASHBOARD.bat`** in the project root.
+3. Choose **1 — Start Pitt Meeting Hub**. The launcher checks Node.js, creates the initial config and opens the browser automatically.
+4. The first start creates `packages/hub/config/hub.local.json`.
 
 The Hub is loopback-only by default. Do not change `bindHost` to `0.0.0.0` until unique node tokens and a firewall rule are configured.
 
 ## Start a Node (any agent PC)
 
 1. Copy the repository (or the Node package release) to that computer.
-2. Run `scripts/start-node.sh` on Linux or `scripts\start-node.bat` on Windows.
-3. The first start creates `packages/node/config/node.local.json`.
-4. Set a unique `nodeId`, human-friendly `agentName`, optional Hub URL and that node's unique Hub token.
-5. Open the local dashboard at `http://127.0.0.1:3100`.
+2. Run `./start-dashboard.sh` on Linux or double-click `START-DASHBOARD.bat` on Windows.
+3. Choose **2 — Start this computer's Agent Node dashboard**. The launcher opens the local Dashboard automatically.
+4. The first start creates `packages/node/config/node.local.json`.
+5. Set a unique `nodeId`, human-friendly `agentName`, optional Hub URL and that node's unique Hub token.
 
 The node works locally even before a Hub is configured.
 
