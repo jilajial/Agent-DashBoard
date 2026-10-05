@@ -3,6 +3,7 @@
 const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
+const os = require("node:os");
 const { now, safeText, PROTOCOL_VERSION } = require("../../shared/protocol");
 
 const ROOT = path.resolve(__dirname, "..");
@@ -30,6 +31,22 @@ function ensureConfig() {
 const config = ensureConfig();
 const state = readJson(DATA_PATH, { nodes: {}, events: [], meetings: [], tasks: [] });
 const streams = new Set();
+function hubParticipant() {
+  return {
+    nodeId: "pitt",
+    agentName: "Pitt",
+    role: "Meeting Hub coordinator",
+    hostname: os.hostname(),
+    status: "online",
+    online: true,
+    lastSeen: now(),
+    protocol: PROTOCOL_VERSION,
+    capabilities: { hub: { present: true, output: "Pitt Meeting Hub running" } }
+  };
+}
+function participants() {
+  return [hubParticipant(), ...Object.values(state.nodes).filter(node => node.nodeId !== "pitt")];
+}
 function persist() { writeJson(DATA_PATH, state); }
 function event(type, message, data = {}) {
   const entry = { id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, at: now(), type, message: safeText(message, 500), data };
@@ -54,14 +71,14 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
   try {
     if (req.method === "GET" && url.pathname === "/api/health") return sendJson(res, 200, { ok:true, name:config.name, protocol:PROTOCOL_VERSION, at:now() });
-    if (req.method === "GET" && url.pathname === "/api/overview") return sendJson(res, 200, { nodes:Object.values(state.nodes), events:state.events.slice(0,80), meetings:state.meetings, tasks:state.tasks, at:now() });
+    if (req.method === "GET" && url.pathname === "/api/overview") return sendJson(res, 200, { nodes:participants(), events:state.events.slice(0,80), meetings:state.meetings, tasks:state.tasks, at:now() });
     if (req.method === "GET" && url.pathname === "/api/stream") {
       res.writeHead(200, { "content-type":"text/event-stream", "cache-control":"no-cache", connection:"keep-alive" }); res.write("retry: 3000\n\n"); streams.add(res); req.on("close", () => streams.delete(res)); return;
     }
     if (req.method === "POST" && url.pathname === "/api/nodes/heartbeat") {
       const body = await parseBody(req); if (!nodeAllowed(req, body.nodeId)) return sendJson(res, 401, { error:"node authentication failed" });
       const old = state.nodes[body.nodeId] || {}; const node = { ...old, ...body, nodeId:body.nodeId, lastSeen:now(), online:true, protocol:PROTOCOL_VERSION };
-      delete node.hubToken; state.nodes[node.nodeId] = node; persist(); event("node-heartbeat", `${node.agentName || node.nodeId} reported status`, { nodeId:node.nodeId, status:node.status }); broadcast("overview", { nodes:Object.values(state.nodes) }); return sendJson(res, 200, { ok:true, hubTime:now() });
+      delete node.hubToken; state.nodes[node.nodeId] = node; persist(); event("node-heartbeat", `${node.agentName || node.nodeId} reported status`, { nodeId:node.nodeId, status:node.status }); broadcast("overview", { nodes:participants() }); return sendJson(res, 200, { ok:true, hubTime:now() });
     }
     if (req.method === "POST" && url.pathname === "/api/meeting/messages") {
       const body = await parseBody(req); const message = { id:`m-${Date.now()}`, at:now(), from:safeText(body.from || "Jian",80), text:safeText(body.text,2000), target:safeText(body.target || "all",80) };
