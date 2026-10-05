@@ -1,0 +1,9 @@
+{
+  "nodeId": "replace-with-node-id",
+  "agentName": "Agent name",
+  "role": "Local Agent",
+  "localPort": 3100,
+  "hubUrl": "",
+  "hubToken": "",
+  "pollSeconds": 20
+}

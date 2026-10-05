@@ -1,0 +1,15 @@
+[Unit]
+Description=Agent Dashboard Node
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=REPLACE_WITH_PROJECT_PATH
+ExecStart=REPLACE_WITH_PROJECT_PATH/scripts/start-node.sh
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,14 @@
+{
+  "name": "pitt-meeting-hub",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cross-platform meeting hub and local agent dashboard nodes.",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "hub": "node packages/hub/server/index.js",
+    "node": "node packages/node/server/index.js",
+    "check": "node --check packages/hub/server/index.js && node --check packages/node/server/index.js"
+  }
+}
