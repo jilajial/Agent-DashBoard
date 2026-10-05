@@ -18,8 +18,8 @@ while true; do
   printf '1) Start Pitt Meeting Hub\n2) Start this computer Agent Node\n3) Edit Hub settings\n4) Edit Node settings\n5) Read deployment guide\nq) Exit\n> '
   read -r option
   case "$option" in
-    1) [ -f packages/hub/config/hub.local.json ] || cp packages/hub/config/hub.example.json packages/hub/config/hub.local.json; node packages/hub/server/index.js & sleep 2; open_browser http://127.0.0.1:3000 ;;
-    2) [ -f packages/node/config/node.local.json ] || cp packages/node/config/node.example.json packages/node/config/node.local.json; node packages/node/server/index.js & sleep 2; open_browser http://127.0.0.1:3100 ;;
+    1) [ -f packages/hub/config/hub.local.json ] || cp packages/hub/config/hub.example.json packages/hub/config/hub.local.json; ./scripts/start-hub.sh & sleep 2; open_browser http://127.0.0.1:3000 ;;
+    2) [ -f packages/node/config/node.local.json ] || cp packages/node/config/node.example.json packages/node/config/node.local.json; ./scripts/start-node.sh & sleep 2; open_browser http://127.0.0.1:3100 ;;
     3) [ -f packages/hub/config/hub.local.json ] || cp packages/hub/config/hub.example.json packages/hub/config/hub.local.json; "${EDITOR:-nano}" packages/hub/config/hub.local.json ;;
     4) [ -f packages/node/config/node.local.json ] || cp packages/node/config/node.example.json packages/node/config/node.local.json; "${EDITOR:-nano}" packages/node/config/node.local.json ;;
     5) ${PAGER:-less} README.md ;;

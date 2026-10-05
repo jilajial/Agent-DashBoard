@@ -31,7 +31,7 @@ if errorlevel 1 goto hub
 :hub
 if not exist "packages\hub\config\hub.local.json" copy /Y "packages\hub\config\hub.example.json" "packages\hub\config\hub.local.json" >nul
 echo Starting Pitt Meeting Hub in a separate window...
-start "Pitt Meeting Hub" cmd /k "cd /d ""%CD%"" ^&^& node packages\hub\server\index.js"
+start "Pitt Meeting Hub" cmd /k "call ""%CD%\scripts\start-hub.bat"""
 timeout /t 2 /nobreak >nul
 start "" "http://127.0.0.1:3000"
 goto done
@@ -39,7 +39,7 @@ goto done
 :node
 if not exist "packages\node\config\node.local.json" copy /Y "packages\node\config\node.example.json" "packages\node\config\node.local.json" >nul
 echo Starting this computer's Agent Node dashboard in a separate window...
-start "Agent Node Dashboard" cmd /k "cd /d ""%CD%"" ^&^& node packages\node\server\index.js"
+start "Agent Node Dashboard" cmd /k "call ""%CD%\scripts\start-node.bat"""
 timeout /t 2 /nobreak >nul
 start "" "http://127.0.0.1:3100"
 goto done
