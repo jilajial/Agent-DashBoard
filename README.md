@@ -17,6 +17,14 @@ Node.js **22.13+**. The project intentionally has no npm runtime dependencies.
 3. Choose **1 — Start Pitt Meeting Hub**. The launcher checks Node.js, creates the initial config and opens the browser automatically.
 4. The first start creates `packages/hub/config/hub.local.json`.
 
+## Updates
+
+From the root launcher choose **6 — Check / download GitHub update, then start**. It checks the `main` branch, shows whether updates exist, asks for confirmation, applies a fast-forward update, and then starts either Hub or Node.
+
+- A Git clone updates directly.
+- A ZIP download can be enrolled on the first update; the launcher clearly asks before replacing program files. `*.local.json` settings remain untouched.
+- Git must be installed once. On Windows, the launcher opens the official Git for Windows download page if Git is missing.
+
 The Hub is loopback-only by default. Do not change `bindHost` to `0.0.0.0` until unique node tokens and a firewall rule are configured.
 
 ## Start a Node (any agent PC)

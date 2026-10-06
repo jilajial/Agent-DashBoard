@@ -18,10 +18,12 @@ echo   [2] Start this computer's Agent Node dashboard
 echo   [3] Edit Hub connection settings
 echo   [4] Edit this computer's Node settings
 echo   [5] Open README / deployment guide
+echo   [6] Check / download GitHub update, then start
 echo   [Q] Exit
 echo.
-choice /C 12345Q /N /M "Choose"
-if errorlevel 6 goto :eof
+choice /C 123456Q /N /M "Choose"
+if errorlevel 7 goto :eof
+if errorlevel 6 goto update
 if errorlevel 5 goto docs
 if errorlevel 4 goto nodeConfig
 if errorlevel 3 goto hubConfig
@@ -56,6 +58,64 @@ goto menu
 
 :docs
 start "" "README.md"
+goto menu
+
+:update
+where git >nul 2>nul
+if errorlevel 1 (
+  echo Git is required for one-click updates but was not found.
+  choice /C YN /N /M "Open the official Git for Windows download page now"
+  if errorlevel 2 goto menu
+  start "" "https://git-scm.com/download/win"
+  goto menu
+)
+if not exist ".git" (
+  echo.
+  echo This looks like a ZIP copy. It can be enrolled for one-click updates.
+  echo Local *.local.json configuration files are preserved. Edited program files will be replaced.
+  choice /C YN /N /M "Enroll this copy and download the current release"
+  if errorlevel 2 goto menu
+  git init >nul || goto updateFailed
+  git remote add origin https://github.com/jilajial/Agent-DashBoard.git 2>nul
+  git remote set-url origin https://github.com/jilajial/Agent-DashBoard.git || goto updateFailed
+  git fetch --quiet origin main || goto updateFailed
+  git reset --hard origin/main || goto updateFailed
+  echo Update complete.
+  goto chooseAfterUpdate
+)
+for /f "delims=" %%S in ('git status --porcelain --untracked-files=no') do set "DIRTY=1"
+if defined DIRTY (
+  echo.
+  echo Update stopped: program files have local edits.
+  echo Commit or discard those edits first. Your *.local.json settings are not the problem.
+  set "DIRTY="
+  pause
+  goto menu
+)
+git fetch --quiet origin main || goto updateFailed
+for /f %%A in ('git rev-list --count HEAD..origin/main') do set "UPDATE_COUNT=%%A"
+if "%UPDATE_COUNT%"=="0" (
+  echo.
+  echo This copy is already up to date.
+  goto chooseAfterUpdate
+)
+echo.
+echo %UPDATE_COUNT% update commit^(s^) are available.
+choice /C YN /N /M "Download and apply the update now"
+if errorlevel 2 goto menu
+git pull --ff-only origin main || goto updateFailed
+echo Update complete.
+
+:chooseAfterUpdate
+choice /C 12M /N /M "Start [1] Hub, [2] Agent Node, or [M] return to menu"
+if errorlevel 3 goto menu
+if errorlevel 2 goto node
+goto hub
+
+:updateFailed
+echo.
+echo Update could not be completed. Check Internet access and try again.
+pause
 goto menu
 
 :done
