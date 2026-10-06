@@ -18,9 +18,13 @@ const config = json(CONFIG, json(EXAMPLE, {}));
 const events = [];
 function log(type, message) { events.unshift({ at:now(), type, message:safeText(message,500) }); events.splice(120); }
 async function probe(command, args = []) { try { const { stdout } = await exec(command, args, { timeout:6000 }); return { present:true, output:safeText(stdout,400) }; } catch (error) { return { present:false, output:safeText(error.code === "ENOENT" ? "not installed" : error.message,400) }; } }
+function commandFor(capability, fallback) {
+  const configured = config.commandPaths && config.commandPaths[capability];
+  return typeof configured === "string" && configured.trim() ? configured.trim() : fallback;
+}
 async function collect() {
   const [nodeVersion, openclaw, hermes, ollama, nvidia] = await Promise.all([
-    probe(process.execPath,["--version"]), probe("openclaw",["--version"]), probe("hermes",["--version"]), probe("ollama",["list"]), probe("nvidia-smi",["--query-gpu=name,utilization.gpu,memory.used,memory.total,temperature.gpu","--format=csv,noheader,nounits"])
+    probe(process.execPath,["--version"]), probe(commandFor("openclaw","openclaw"),["--version"]), probe(commandFor("hermes","hermes"),["--version"]), probe(commandFor("ollama","ollama"),["list"]), probe(commandFor("nvidia","nvidia-smi"),["--query-gpu=name,utilization.gpu,memory.used,memory.total,temperature.gpu","--format=csv,noheader,nounits"])
   ]);
   const mem = process.memoryUsage();
   return { nodeId:config.nodeId, agentName:config.agentName, role:config.role, hostname:require("node:os").hostname(), status:"online", at:now(), runtime:{ node:nodeVersion.output, uptimeSeconds:Math.round(process.uptime()), memoryMb:Math.round(mem.rss/1024/1024) }, capabilities:{ openclaw, hermes, ollama, nvidia }, events:events.slice(0,20) };

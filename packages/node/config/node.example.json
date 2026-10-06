@@ -5,5 +5,11 @@
   "localPort": 3100,
   "hubUrl": "",
   "hubToken": "",
-  "pollSeconds": 20
+  "pollSeconds": 20,
+  "commandPaths": {
+    "openclaw": "",
+    "hermes": "",
+    "ollama": "",
+    "nvidia": ""
+  }
 }

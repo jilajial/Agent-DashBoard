@@ -25,6 +25,12 @@ The Hub is loopback-only by default. Do not change `bindHost` to `0.0.0.0` until
 2. Run `./start-dashboard.sh` on Linux or double-click `START-DASHBOARD.bat` on Windows.
 3. Choose **2 — Start this computer's Agent Node dashboard**. The launcher opens the local Dashboard automatically.
 4. The first start creates `packages/node/config/node.local.json`.
+
+If a local service has a non-standard executable location, set it in `commandPaths` in that file. This only improves status detection and never reads credentials:
+
+```json
+"commandPaths": { "openclaw": "/home/agent/.openclaw/tmp/agent-cli/openclaw" }
+```
 5. Set a unique `nodeId`, human-friendly `agentName`, optional Hub URL and that node's unique Hub token.
 
 The node works locally even before a Hub is configured.
