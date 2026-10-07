@@ -1,1 +1,49 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Agent Node</title><link rel="stylesheet" href="/css/app.css"></head><body><main><header><span class="dot"></span><div><b id="name">AGENT NODE</b><small id="host"></small></div><button id="refresh">刷新检测</button></header><section id="summary" class="panel"></section><section class="panel"><h2>LOCAL AGENT CHAT</h2><p class="muted">此对话直接使用本机 Agent；Hub 离线也可使用。</p><div id="chat" class="chat"></div><form id="chatForm"><input id="message" maxlength="4000" placeholder="向本机 Agent 发送消息…"><button>发送</button></form></section><section class="grid" id="caps"></section><section class="panel"><h2>LOCAL EVENT LOG</h2><div id="events"></div></section></main><script src="/js/app.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agent Node</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="dot"></span><b>AGENTS HQ</b><small>LOCAL AGENT NODE</small></div>
+    <div class="header-right"><span id="clock"></span><button id="refresh">刷新检测</button></div>
+  </header>
+  <main>
+    <section class="hero">
+      <div><p class="eyebrow">LOCAL DASHBOARD · INDEPENDENT MODE</p><h1 id="name">AGENT NODE</h1><p id="host">正在读取本机状态…</p></div>
+      <div class="hero-status"><span class="dot"></span><span id="heroState">CHECKING</span></div>
+    </section>
+    <section class="workspace">
+      <aside class="sidebar">
+        <section class="side-section hub-section">
+          <h2>HQ CONNECTION</h2>
+          <div id="summary" class="connection-card"></div>
+        </section>
+        <section class="side-section capabilities-section">
+          <h2>LOCAL CAPABILITIES</h2>
+          <div id="caps" class="scroll-area caps"></div>
+        </section>
+      </aside>
+      <section class="meeting">
+        <div class="meeting-head">
+          <h2>LOCAL AGENT CHAT</h2>
+          <p class="muted">直接与本机 Agent 对话；Agents HQ 离线时仍可使用。</p>
+        </div>
+        <div id="chat" class="messages"></div>
+        <form id="chatForm" class="composer">
+          <input id="message" maxlength="4000" placeholder="向本机 Agent 发送消息…" autocomplete="off">
+          <button>发送</button>
+        </form>
+        <details class="utility" open>
+          <summary>LOCAL EVENT STREAM <span>点击收起 / 展开</span></summary>
+          <div id="events" class="events"></div>
+        </details>
+      </section>
+    </section>
+  </main>
+  <script src="/js/app.js"></script>
+</body>
+</html>
