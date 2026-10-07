@@ -4,8 +4,18 @@
   "role": "Local Agent",
   "localPort": 3100,
   "hubUrl": "",
-  "hubToken": "",
   "pollSeconds": 20,
+  "discovery": {
+    "enabled": true,
+    "port": 35100
+  },
+  "agentAdapter": {
+    "type": "auto",
+    "command": "",
+    "agentId": "main",
+    "ollamaModel": "",
+    "timeoutSeconds": 180
+  },
   "commandPaths": {
     "openclaw": "",
     "hermes": "",

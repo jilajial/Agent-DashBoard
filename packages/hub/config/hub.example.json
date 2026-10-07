@@ -1,10 +1,10 @@
 {
   "name": "Pitt Meeting Hub",
-  "bindHost": "127.0.0.1",
+  "bindHost": "0.0.0.0",
   "port": 3000,
-  "nodeTokens": {
-    "jane": "REPLACE_WITH_A_LONG_UNIQUE_TOKEN",
-    "bowen": "REPLACE_WITH_A_LONG_UNIQUE_TOKEN",
-    "helen": "REPLACE_WITH_A_LONG_UNIQUE_TOKEN"
+  "lan": {
+    "enabled": true,
+    "discoveryPort": 35100,
+    "nodeTimeoutSeconds": 45
   }
 }

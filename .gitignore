@@ -2,6 +2,7 @@ node_modules/
 .tools/
 data/
 *.local.json
+*.identity.json
 *.token
 *.key
 *.pem

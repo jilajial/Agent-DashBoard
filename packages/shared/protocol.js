@@ -1,7 +1,7 @@
 "use strict";
 
-const PROTOCOL_VERSION = "1";
-const SAFE_ACTIONS = ["status", "report", "draft", "meeting-message"];
+const PROTOCOL_VERSION = "2";
+const SAFE_ACTIONS = ["status", "report", "draft", "meeting-message", "agent-chat"];
 const CONFIRMED_ACTIONS = ["restart", "update", "model-change", "external-send", "delete"];
 
 function now() {
