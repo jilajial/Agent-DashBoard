@@ -57,8 +57,8 @@ update_then_start() {
 }
 
 while true; do
-  printf '\n=== PITT MEETING HUB LAUNCHER ===\n'
-  printf '1) Start Pitt Meeting Hub\n2) Start this computer Agent Node\n3) Edit Hub settings\n4) Edit Node settings\n5) Read deployment guide\n6) Check / download GitHub update, then start\nq) Exit\n> '
+  printf '\n=== AGENTS HQ LAUNCHER ===\n'
+  printf '1) Start Agents HQ\n2) Start this computer Agent Node\n3) Edit Hub settings\n4) Edit Node settings\n5) Read deployment guide\n6) Check / download GitHub update, then start\nq) Exit\n> '
   read -r option
   case "$option" in
     1) launch_hub ;;

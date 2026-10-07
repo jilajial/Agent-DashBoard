@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions
 cd /d "%~dp0"
-title Pitt Meeting Hub - Launch Guide
+title Agents HQ - Launch Guide
 
 call :checkNode
 if errorlevel 1 exit /b 1
@@ -10,10 +10,10 @@ if errorlevel 1 exit /b 1
 cls
 echo.
 echo ============================================================
-echo                  PITT MEETING HUB LAUNCHER
+echo                    AGENTS HQ LAUNCHER
 echo ============================================================
 echo.
-echo   [1] Start Pitt Meeting Hub ^(Windows controller^)
+echo   [1] Start Agents HQ ^(Windows controller^)
 echo   [2] Start this computer's Agent Node dashboard
 echo   [3] Edit Hub connection settings
 echo   [4] Edit this computer's Node settings
@@ -32,8 +32,8 @@ if errorlevel 1 goto hub
 
 :hub
 if not exist "packages\hub\config\hub.local.json" copy /Y "packages\hub\config\hub.example.json" "packages\hub\config\hub.local.json" >nul
-echo Starting Pitt Meeting Hub in a separate window...
-start "Pitt Meeting Hub" cmd /k "call ""%CD%\scripts\start-hub.bat"""
+echo Starting Agents HQ in a separate window...
+start "Agents HQ" cmd /k "call ""%CD%\scripts\start-hub.bat"""
 timeout /t 2 /nobreak >nul
 start "" "http://127.0.0.1:3000"
 goto done

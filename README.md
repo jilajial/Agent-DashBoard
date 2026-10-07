@@ -1,8 +1,8 @@
-# Pitt Meeting Hub / Agent Dashboard
+# Agents HQ / Agent Dashboard
 
 一个可跨 Windows 与 Linux 部署的 **Hub + Node** 项目：
 
-- **Hub 总包**：运行在 Jian 的 Windows 10 主控电脑；自动批准节点、主持私聊/主题会议、任务与审计事件。
+- **Agents HQ 总包**：运行在 Jian 的 Windows 10 主控电脑；自动批准节点、主持私聊/主题会议、任务与审计事件。Pitt 是其中的协调 Agent，不是系统名称。
 - **Node 通用分包**：放入任何部署了 OpenClaw 或 Hermes 的电脑，自动检测本机能力、提供独立 Dashboard 与本机 Agent 对话。
 - 初始节点：Jane（Hermes/Ollama）、Bowen（Gemini/OpenClaw）、Helen（DeepSeek/OpenClaw）。
 
@@ -14,7 +14,7 @@ Node.js **22.13+**. The project intentionally has no npm runtime dependencies.
 
 1. Download or clone this repository on Windows 10.
 2. Double-click **`START-DASHBOARD.bat`** in the project root.
-3. Choose **1 — Start Pitt Meeting Hub**. The launcher checks Node.js, creates the initial config and opens the browser automatically.
+3. Choose **1 — Start Agents HQ**. The launcher checks Node.js, creates the initial config and opens the browser automatically.
 4. The first start creates `packages/hub/config/hub.local.json`.
 
 ## Updates
