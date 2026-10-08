@@ -55,9 +55,11 @@ The node works locally even before a Hub is configured. Its **Local Agent Chat**
 
 ## Start a Staff Portal (any human worker PC)
 
-Choose **3 — Start this computer's Staff Portal** from either launcher. On first use, edit `packages/staff/config/staff.local.json` to set a unique `nodeId` and staff display name. The portal discovers the Hub on the LAN, submits a signed pairing request, and stays pending until a Hub administrator approves it locally.
+Choose **3 — Start this computer's Staff Portal** from either launcher. On first use, edit `packages/staff/config/staff.local.json` to set a unique `nodeId` and staff display name.
 
-An approved staff worker can view participants and exchange topic (`# general`) and direct messages. The Staff package intentionally has no local Agent Chat, command adapter, shell execution, or task-dispatch API.
+The Staff Portal does not register automatically. Click **报到** in its upper-left corner to submit a signed request; the button changes to **等待 Hub 批准** until a Hub administrator approves it. Once approved, it becomes **退出**. Exiting immediately removes the staff member from the online roster while keeping the approved device visible to the Hub administrator, who can remove it permanently if needed.
+
+Click the name button in the Portal's upper-right corner to update the local display name and the Hub roster. Checked-in staff can see all online agents and staff, participate in `# general`, and select any online participant for a direct conversation. The Staff package intentionally has no local Agent Chat, command adapter, shell execution, or task-dispatch API.
 
 ## Environment guide
 
