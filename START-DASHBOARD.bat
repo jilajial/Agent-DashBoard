@@ -83,7 +83,11 @@ if errorlevel 1 (
   echo Git is required for one-click updates but was not found.
   where winget >nul 2>nul
   if errorlevel 1 goto gitDownload
-  choice /C YN /N /M "Install Git now using Windows Package Manager"
+  echo.
+  echo [Y] Install Git now using Windows Package Manager
+  echo [N] Do not install; open the official download page instead
+  echo Press Y or N (no Enter required).
+  choice /C YN /N /M "Selection"
   if errorlevel 2 goto gitDownload
   winget install --id Git.Git -e --source winget --accept-package-agreements --accept-source-agreements
   set "PATH=%PATH%;%ProgramFiles%\Git\cmd"
@@ -97,7 +101,10 @@ if not exist ".git" (
   echo.
   echo This looks like a ZIP copy. It can be enrolled for one-click updates.
   echo Local *.local.json configuration files are preserved. Edited program files will be replaced.
-  choice /C YN /N /M "Enroll this copy and download the current release"
+  echo [Y] Enroll this ZIP copy and download the current release
+  echo [N] Cancel and return to the launcher
+  echo Press Y or N (no Enter required).
+  choice /C YN /N /M "Selection"
   if errorlevel 2 goto menu
   git init >nul || goto updateFailed
   git remote add origin https://github.com/jilajial/Agent-DashBoard.git 2>nul
@@ -125,7 +132,10 @@ if "%UPDATE_COUNT%"=="0" (
 )
 echo.
 echo %UPDATE_COUNT% update commit^(s^) are available.
-choice /C YN /N /M "Download and apply the update now"
+echo [Y] Download and apply the update now
+echo [N] Cancel and return to the launcher
+echo Press Y or N (no Enter required).
+choice /C YN /N /M "Selection"
 if errorlevel 2 goto menu
 git pull --ff-only origin main || goto updateFailed
 echo Update complete.
@@ -144,7 +154,11 @@ pause
 goto menu
 
 :gitDownload
-choice /C YN /N /M "Open the official Git for Windows download page now"
+echo.
+echo [Y] Open the official Git for Windows download page
+echo [N] Cancel and return to the launcher
+echo Press Y or N (no Enter required).
+choice /C YN /N /M "Selection"
 if errorlevel 2 goto menu
 start "" "https://git-scm.com/download/win"
 echo Install Git, close this window, then run START-DASHBOARD.bat again.
@@ -169,7 +183,11 @@ exit /b 0
 echo Node.js 22.13+ was not found.
 where winget >nul 2>nul
 if errorlevel 1 goto nodeDownload
-choice /C YN /N /M "Install Node.js LTS now using Windows Package Manager"
+  echo.
+  echo [Y] Install Node.js LTS now using Windows Package Manager
+  echo [N] Do not install; open the official download page instead
+  echo Press Y or N (no Enter required).
+  choice /C YN /N /M "Selection"
 if errorlevel 2 goto nodeDownload
 winget install --id OpenJS.NodeJS.LTS -e --source winget --accept-package-agreements --accept-source-agreements
 set "PATH=%PATH%;%ProgramFiles%\nodejs"
@@ -179,7 +197,11 @@ pause
 exit /b 1
 
 :nodeDownload
-choice /C YN /N /M "Open the official Node.js LTS download page now"
+echo.
+echo [Y] Open the official Node.js LTS download page
+echo [N] Cancel and return to the launcher
+echo Press Y or N (no Enter required).
+choice /C YN /N /M "Selection"
 if errorlevel 2 exit /b 1
 start "" "https://nodejs.org/en/download"
 echo Install Node.js LTS, close this window, then run START-DASHBOARD.bat again.
