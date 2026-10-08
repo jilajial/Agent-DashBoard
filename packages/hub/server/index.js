@@ -36,8 +36,19 @@ function passwordMatches(password,stored) { const [,salt,hash]=String(stored||""
 function adminAuthorized(req) { const token=cookie(req,"agents_hq_session"), session=authSessions.get(token); if(!session||session.expires<Date.now()){authSessions.delete(token);return false;} return isLocal(req); }
 function requireAdmin(req,res) { if(!isLocal(req)) { sendJson(res,403,{error:"Hub administration is local-only"}); return false; } if(!config.auth?.passwordHash) { sendJson(res,401,{error:"Hub password setup is required"}); return false; } if(!adminAuthorized(req)) { sendJson(res,401,{error:"Hub login is required"}); return false; } return true; }
 function nodeOnline(node) { return Boolean(node && Date.now()-Date.parse(node.lastSeen||0) < Number(config.lan.nodeTimeoutSeconds||45)*1000); }
-function participants() { return Object.values(state.nodes).map(node => ({...node,online:nodeOnline(node),status:nodeOnline(node)?node.status||"online":"offline"})); }
-function staffParticipants() { return [...participants(),...Object.values(state.workers).map(worker=>({...worker,online:nodeOnline(worker),status:nodeOnline(worker)?worker.status||"online":"offline"}))]; }
+// An approved participant remains visible even before its first heartbeat.
+// This applies equally to Agent Nodes and human Staff Portals.
+function participants() {
+  return Object.values(state.devices)
+    .filter(device=>!device.revoked)
+    .map(device=>{
+      const runtime=(device.clientType||"node")==="staff" ? state.workers[device.nodeId] : state.nodes[device.nodeId];
+      const online=nodeOnline(runtime);
+      return {...device,...(runtime||{}),online,status:online?(runtime?.status||"online"):"offline"};
+    })
+    .sort((a,b)=>Number(b.online)-Number(a.online)||String(a.agentName).localeCompare(String(b.agentName)));
+}
+function staffParticipants() { return participants(); }
 function broadcast(kind,payload) { const frame=`event: ${kind}\ndata: ${JSON.stringify(payload)}\n\n`; for (const res of streams) { try {res.write(frame);} catch {streams.delete(res);} } }
 function event(type,message,data={}) { const value={id:id("e"),at:now(),type,message:safeText(message,500),data}; state.events.unshift(value); state.events=state.events.slice(0,500); persist(); broadcast("event",value); return value; }
 function overview(includePending=false) { return {nodes:participants(),pending:includePending?Object.values(state.pending).map(pendingPublic):[],messages:state.messages.slice(-400),events:state.events.slice(0,100),tasks:state.tasks,at:now()}; }
