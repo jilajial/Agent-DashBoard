@@ -78,6 +78,10 @@ start "" "README.md"
 goto menu
 
 :update
+rem Git for Windows may be installed but unavailable to an Explorer-launched
+rem cmd.exe until the user signs out.  Check its standard locations first.
+if exist "%ProgramFiles%\Git\cmd\git.exe" set "PATH=%PATH%;%ProgramFiles%\Git\cmd"
+if exist "%LocalAppData%\Programs\Git\cmd\git.exe" set "PATH=%PATH%;%LocalAppData%\Programs\Git\cmd"
 where git >nul 2>nul
 if errorlevel 1 (
   echo Git is required for one-click updates but was not found.
