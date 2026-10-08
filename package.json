@@ -1,6 +1,6 @@
 {
   "name": "pitt-meeting-hub",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Cross-platform meeting hub and local agent dashboard nodes.",
   "engines": {

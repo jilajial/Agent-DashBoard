@@ -5,6 +5,7 @@ title Agents HQ - Launch Guide
 
 call :checkNode
 if errorlevel 1 exit /b 1
+call :buildInfo
 
 :menu
 cls
@@ -12,6 +13,7 @@ echo.
 echo ============================================================
 echo                    AGENTS HQ LAUNCHER
 echo ============================================================
+echo   Agent Dashboard version: v%DASHBOARD_VERSION% ^(build %DASHBOARD_BUILD%^)
 echo.
 echo   [1] Start Agents HQ ^(Windows controller^)
 echo   [2] Start this computer's Agent Node dashboard
@@ -190,6 +192,13 @@ where node >nul 2>nul
 if errorlevel 1 goto installNode
 node -e "const [a,b]=process.versions.node.split('.').map(Number);process.exit(a>22||(a===22&&b>=13)?0:1)"
 if errorlevel 1 goto nodeOld
+exit /b 0
+
+:buildInfo
+set "DASHBOARD_VERSION=unknown"
+set "DASHBOARD_BUILD=source copy"
+for /f "delims=" %%V in ('node -p "require('./package.json').version" 2^>nul') do set "DASHBOARD_VERSION=%%V"
+for /f "delims=" %%R in ('git rev-parse --short HEAD 2^>nul') do set "DASHBOARD_BUILD=%%R"
 exit /b 0
 
 :installNode
