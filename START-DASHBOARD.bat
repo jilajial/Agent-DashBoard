@@ -15,18 +15,22 @@ echo ============================================================
 echo.
 echo   [1] Start Agents HQ ^(Windows controller^)
 echo   [2] Start this computer's Agent Node dashboard
-echo   [3] Edit Hub connection settings
-echo   [4] Edit this computer's Node settings
-echo   [5] Open README / deployment guide
-echo   [6] Check / download GitHub update, then start
+echo   [3] Start this computer's Staff Portal
+echo   [4] Edit Hub connection settings
+echo   [5] Edit this computer's Node settings
+echo   [6] Edit this computer's Staff Portal settings
+echo   [7] Open README / deployment guide
+echo   [8] Check / download GitHub update, then start
 echo   [Q] Exit
 echo.
-choice /C 123456Q /N /M "Choose"
-if errorlevel 7 goto :eof
-if errorlevel 6 goto update
-if errorlevel 5 goto docs
-if errorlevel 4 goto nodeConfig
-if errorlevel 3 goto hubConfig
+choice /C 12345678Q /N /M "Choose"
+if errorlevel 9 goto :eof
+if errorlevel 8 goto update
+if errorlevel 7 goto docs
+if errorlevel 6 goto staffConfig
+if errorlevel 5 goto nodeConfig
+if errorlevel 4 goto hubConfig
+if errorlevel 3 goto staff
 if errorlevel 2 goto node
 if errorlevel 1 goto hub
 
@@ -46,6 +50,14 @@ timeout /t 2 /nobreak >nul
 start "" "http://127.0.0.1:3100"
 goto done
 
+:staff
+if not exist "packages\staff\config\staff.local.json" copy /Y "packages\staff\config\staff.example.json" "packages\staff\config\staff.local.json" >nul
+echo Starting this computer's Staff Portal in a separate window...
+start "Staff Portal" cmd /k "call ""%CD%\scripts\start-staff.bat"""
+timeout /t 2 /nobreak >nul
+start "" "http://127.0.0.1:3200"
+goto done
+
 :hubConfig
 if not exist "packages\hub\config\hub.local.json" copy /Y "packages\hub\config\hub.example.json" "packages\hub\config\hub.local.json" >nul
 notepad "packages\hub\config\hub.local.json"
@@ -54,6 +66,11 @@ goto menu
 :nodeConfig
 if not exist "packages\node\config\node.local.json" copy /Y "packages\node\config\node.example.json" "packages\node\config\node.local.json" >nul
 notepad "packages\node\config\node.local.json"
+goto menu
+
+:staffConfig
+if not exist "packages\staff\config\staff.local.json" copy /Y "packages\staff\config\staff.example.json" "packages\staff\config\staff.local.json" >nul
+notepad "packages\staff\config\staff.local.json"
 goto menu
 
 :docs
@@ -107,8 +124,9 @@ git pull --ff-only origin main || goto updateFailed
 echo Update complete.
 
 :chooseAfterUpdate
-choice /C 12M /N /M "Start [1] Hub, [2] Agent Node, or [M] return to menu"
-if errorlevel 3 goto menu
+choice /C 123M /N /M "Start [1] Hub, [2] Agent Node, [3] Staff Portal, or [M] return to menu"
+if errorlevel 4 goto menu
+if errorlevel 3 goto staff
 if errorlevel 2 goto node
 goto hub
 

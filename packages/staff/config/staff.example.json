@@ -1,0 +1,9 @@
+{
+  "nodeId": "replace-with-staff-id",
+  "agentName": "Staff member",
+  "role": "Staff Worker",
+  "localPort": 3200,
+  "hubUrl": "",
+  "pollSeconds": 10,
+  "discovery": { "enabled": true, "port": 35100 }
+}

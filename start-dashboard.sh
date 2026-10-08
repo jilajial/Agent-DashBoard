@@ -23,6 +23,12 @@ launch_node() {
   ./scripts/start-node.sh & sleep 2
   open_browser http://127.0.0.1:3100
 }
+launch_staff() {
+  check_node || return
+  [ -f packages/staff/config/staff.local.json ] || cp packages/staff/config/staff.example.json packages/staff/config/staff.local.json
+  ./scripts/start-staff.sh & sleep 2
+  open_browser http://127.0.0.1:3200
+}
 update_then_start() {
   if ! command -v git >/dev/null; then
     echo "Git is required for one-click updates. Install it with your system package manager, then retry."
@@ -51,22 +57,24 @@ update_then_start() {
       git pull --ff-only origin main || { echo "Update failed."; return; }
     fi
   fi
-  printf 'Start: 1) Hub  2) Agent Node  m) Menu\n> '
+  printf 'Start: 1) Hub  2) Agent Node  3) Staff Portal  m) Menu\n> '
   read -r target
-  case "$target" in 1) launch_hub ;; 2) launch_node ;; esac
+  case "$target" in 1) launch_hub ;; 2) launch_node ;; 3) launch_staff ;; esac
 }
 
 while true; do
   printf '\n=== AGENTS HQ LAUNCHER ===\n'
-  printf '1) Start Agents HQ\n2) Start this computer Agent Node\n3) Edit Hub settings\n4) Edit Node settings\n5) Read deployment guide\n6) Check / download GitHub update, then start\nq) Exit\n> '
+  printf '1) Start Agents HQ\n2) Start this computer Agent Node\n3) Start this computer Staff Portal\n4) Edit Hub settings\n5) Edit Node settings\n6) Edit Staff Portal settings\n7) Read deployment guide\n8) Check / download GitHub update, then start\nq) Exit\n> '
   read -r option
   case "$option" in
     1) launch_hub ;;
     2) launch_node ;;
-    3) [ -f packages/hub/config/hub.local.json ] || cp packages/hub/config/hub.example.json packages/hub/config/hub.local.json; "${EDITOR:-nano}" packages/hub/config/hub.local.json ;;
-    4) [ -f packages/node/config/node.local.json ] || cp packages/node/config/node.example.json packages/node/config/node.local.json; "${EDITOR:-nano}" packages/node/config/node.local.json ;;
-    5) ${PAGER:-less} README.md ;;
-    6) update_then_start ;;
+    3) launch_staff ;;
+    4) [ -f packages/hub/config/hub.local.json ] || cp packages/hub/config/hub.example.json packages/hub/config/hub.local.json; "${EDITOR:-nano}" packages/hub/config/hub.local.json ;;
+    5) [ -f packages/node/config/node.local.json ] || cp packages/node/config/node.example.json packages/node/config/node.local.json; "${EDITOR:-nano}" packages/node/config/node.local.json ;;
+    6) [ -f packages/staff/config/staff.local.json ] || cp packages/staff/config/staff.example.json packages/staff/config/staff.local.json; "${EDITOR:-nano}" packages/staff/config/staff.local.json ;;
+    7) ${PAGER:-less} README.md ;;
+    8) update_then_start ;;
     q|Q) exit 0 ;;
     *) echo "Invalid option." ;;
   esac

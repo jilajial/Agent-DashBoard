@@ -53,6 +53,16 @@ If a local service has a non-standard executable location, set it in `commandPat
 
 The node works locally even before a Hub is configured. Its **Local Agent Chat** tries the local OpenClaw adapter first; when unavailable it uses local Ollama if present. The optional `agentAdapter` section can choose `openclaw`, `ollama`, `command`, or `disabled`.
 
+## Start a Staff Portal (any human worker PC)
+
+Choose **3 — Start this computer's Staff Portal** from either launcher. On first use, edit `packages/staff/config/staff.local.json` to set a unique `nodeId` and staff display name. The portal discovers the Hub on the LAN, submits a signed pairing request, and stays pending until a Hub administrator approves it locally.
+
+An approved staff worker can view participants and exchange topic (`# general`) and direct messages. The Staff package intentionally has no local Agent Chat, command adapter, shell execution, or task-dispatch API.
+
+## Hub local password
+
+On first Hub use, open the Hub from its own computer at `http://127.0.0.1:3000` and set a local password in the browser. The Hub stores only a salted scrypt hash in `hub.local.json`; pairing approvals, revocations, Hub messages, and task dispatch require that local authenticated browser session. The password is never requested through chat or sent to worker portals.
+
 ## Systemd (Linux Node, optional)
 
 Copy `scripts/agent-node.service`, replace `REPLACE_WITH_PROJECT_PATH`, then install it as the intended non-root user with `systemctl --user`. Enable lingering if the node must run without an interactive login.
