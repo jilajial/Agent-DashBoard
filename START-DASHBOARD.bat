@@ -111,8 +111,7 @@ if not exist ".git" (
   git remote set-url origin https://github.com/jilajial/Agent-DashBoard.git || goto updateFailed
   git fetch --quiet origin main || goto updateFailed
   git reset --hard origin/main || goto updateFailed
-  echo Update complete.
-  goto chooseAfterUpdate
+  goto restartAfterUpdate
 )
 for /f "delims=" %%S in ('git status --porcelain --untracked-files=no') do set "DIRTY=1"
 if defined DIRTY (
@@ -138,7 +137,14 @@ echo Press Y or N (no Enter required).
 choice /C YN /N /M "Selection"
 if errorlevel 2 goto menu
 git pull --ff-only origin main || goto updateFailed
-echo Update complete.
+goto restartAfterUpdate
+
+:restartAfterUpdate
+echo.
+echo Update complete. Restarting the updated launcher now...
+timeout /t 2 /nobreak >nul
+call "%~f0"
+goto :eof
 
 :chooseAfterUpdate
 choice /C 123M /N /M "Start [1] Hub, [2] Agent Node, [3] Staff Portal, or [M] return to menu"
@@ -150,6 +156,7 @@ goto hub
 :updateFailed
 echo.
 echo Update could not be completed. Check Internet access and try again.
+echo This window will stay open so you can read the error above.
 pause
 goto menu
 
