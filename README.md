@@ -59,6 +59,10 @@ Choose **3 — Start this computer's Staff Portal** from either launcher. On fir
 
 An approved staff worker can view participants and exchange topic (`# general`) and direct messages. The Staff package intentionally has no local Agent Chat, command adapter, shell execution, or task-dispatch API.
 
+## Environment guide
+
+The root launchers check prerequisites before starting. On Windows, a missing or outdated Node.js LTS installation is offered through Windows Package Manager (`winget`), with the official Node.js page as a fallback. Choosing the one-click update option similarly offers Git for Windows through `winget`, then falls back to its official download page. Every installation requires an explicit local confirmation; restart the launcher after an installer asks for it.
+
 ## Hub local password
 
 On first Hub use, open the Hub from its own computer at `http://127.0.0.1:3000` and set a local password in the browser. The Hub stores only a salted scrypt hash in `hub.local.json`; pairing approvals, revocations, Hub messages, and task dispatch require that local authenticated browser session. The password is never requested through chat or sent to worker portals.

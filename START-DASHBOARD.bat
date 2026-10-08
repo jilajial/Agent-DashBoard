@@ -81,9 +81,16 @@ goto menu
 where git >nul 2>nul
 if errorlevel 1 (
   echo Git is required for one-click updates but was not found.
-  choice /C YN /N /M "Open the official Git for Windows download page now"
-  if errorlevel 2 goto menu
-  start "" "https://git-scm.com/download/win"
+  where winget >nul 2>nul
+  if errorlevel 1 goto gitDownload
+  choice /C YN /N /M "Install Git now using Windows Package Manager"
+  if errorlevel 2 goto gitDownload
+  winget install --id Git.Git -e --source winget --accept-package-agreements --accept-source-agreements
+  set "PATH=%PATH%;%ProgramFiles%\Git\cmd"
+  where git >nul 2>nul
+  if not errorlevel 1 goto update
+  echo Git was installed, but this window cannot see it yet. Close this window and run START-DASHBOARD.bat again.
+  pause
   goto menu
 )
 if not exist ".git" (
@@ -136,6 +143,14 @@ echo Update could not be completed. Check Internet access and try again.
 pause
 goto menu
 
+:gitDownload
+choice /C YN /N /M "Open the official Git for Windows download page now"
+if errorlevel 2 goto menu
+start "" "https://git-scm.com/download/win"
+echo Install Git, close this window, then run START-DASHBOARD.bat again.
+pause
+goto menu
+
 :done
 echo.
 echo Browser launch requested. Keep the new server window open while using the dashboard.
@@ -145,14 +160,26 @@ goto menu
 
 :checkNode
 where node >nul 2>nul
-if errorlevel 1 goto nodeMissing
+if errorlevel 1 goto installNode
 node -e "const [a,b]=process.versions.node.split('.').map(Number);process.exit(a>22||(a===22&&b>=13)?0:1)"
 if errorlevel 1 goto nodeOld
 exit /b 0
 
-:nodeMissing
+:installNode
 echo Node.js 22.13+ was not found.
-choice /C YN /N /M "Open the official Node.js download page now"
+where winget >nul 2>nul
+if errorlevel 1 goto nodeDownload
+choice /C YN /N /M "Install Node.js LTS now using Windows Package Manager"
+if errorlevel 2 goto nodeDownload
+winget install --id OpenJS.NodeJS.LTS -e --source winget --accept-package-agreements --accept-source-agreements
+set "PATH=%PATH%;%ProgramFiles%\nodejs"
+where node >nul 2>nul && goto checkNode
+echo Node.js was installed, but this window cannot see it yet. Close this window and run START-DASHBOARD.bat again.
+pause
+exit /b 1
+
+:nodeDownload
+choice /C YN /N /M "Open the official Node.js LTS download page now"
 if errorlevel 2 exit /b 1
 start "" "https://nodejs.org/en/download"
 echo Install Node.js LTS, close this window, then run START-DASHBOARD.bat again.
@@ -161,6 +188,11 @@ exit /b 1
 
 :nodeOld
 echo Node.js 22.13+ is required. Your installed Node.js is too old.
+where winget >nul 2>nul
+if not errorlevel 1 (
+  choice /C YN /N /M "Upgrade Node.js LTS now using Windows Package Manager"
+  if not errorlevel 2 winget upgrade --id OpenJS.NodeJS.LTS -e --source winget --accept-package-agreements --accept-source-agreements
+)
 start "" "https://nodejs.org/en/download"
 pause
 exit /b 1
