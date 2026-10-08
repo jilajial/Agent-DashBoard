@@ -78,6 +78,8 @@ start "" "README.md"
 goto menu
 
 :update
+set "DIRTY="
+set "UPDATE_COUNT="
 rem Git for Windows may be installed but unavailable to an Explorer-launched
 rem cmd.exe until the user signs out.  Check its standard locations first.
 if exist "%ProgramFiles%\Git\cmd\git.exe" set "PATH=%PATH%;%ProgramFiles%\Git\cmd"
@@ -145,10 +147,10 @@ goto restartAfterUpdate
 
 :restartAfterUpdate
 echo.
-echo Update complete. Restarting the updated launcher now...
-timeout /t 2 /nobreak >nul
-call "%~f0"
-goto :eof
+echo Update complete. The updated launcher is ready to use.
+echo Returning to the menu keeps this window open.
+pause
+goto menu
 
 :chooseAfterUpdate
 choice /C 123M /N /M "Start [1] Hub, [2] Agent Node, [3] Staff Portal, or [M] return to menu"
