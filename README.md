@@ -58,6 +58,19 @@ The Staff Portal is a human collaboration client, not an agent runtime.
 - Uses **Check out** to remove the staff member from the active roster while leaving the device available for Hub administrators to remove permanently.
 - Has no shell execution, task dispatch, local agent adapter, or credential-management capability.
 
+### Online website chat and work queue
+
+The optional `online/` package connects a public website chat widget to one private Hub without exposing the Hub to the internet.
+
+- A resizable, lower-right text-chat widget can be embedded in any website.
+- The reference Node.js service stores one private JSON document per visitor conversation and exposes only authenticated APIs; JSON files are never public URLs.
+- The browser warns after 10 minutes of visitor inactivity and closes the conversation after 30 more seconds unless the visitor selects **Continue**. The server independently completes sessions inactive for one hour.
+- Completed online records remain on the website until an administrator deletes them from the Hub.
+- The Hub synchronizes the queue, lets administrators reply, assign or transfer work to an online Agent/Staff member or role, and mark conversations complete.
+- Hub administrators can associate roles with participants and select an on-duty participant. Conversation archives can later be summarized into an approved local knowledge base.
+
+See [`online/README.md`](online/README.md) for the deployable Node.js reference service and the widget snippet.
+
 ## Requirements
 
 - **Node.js 22.13 or later**
@@ -196,6 +209,7 @@ packages/
   node/      Generic Agent Node dashboard and local agent adapter bridge
   staff/     Human Staff Portal with messaging-only permissions
   shared/    Shared protocol definitions
+online/      Website chat widget, JSON-backed Node.js reference service, and protocol notes
 scripts/     Windows/Linux component launchers and systemd template
 docs/        Architecture notes
 ```

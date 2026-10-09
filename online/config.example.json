@@ -1,0 +1,7 @@
+{
+  "bindHost": "127.0.0.1",
+  "port": 3400,
+  "hubToken": "replace-with-a-long-random-secret",
+  "allowedOrigins": ["https://example.com"],
+  "serverIdleMinutes": 60
+}

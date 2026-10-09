@@ -6,5 +6,11 @@
     "enabled": true,
     "discoveryPort": 35100,
     "nodeTimeoutSeconds": 45
+  },
+  "online": {
+    "enabled": false,
+    "baseUrl": "https://chat.example.com",
+    "hubToken": "replace-with-the-online-service-token",
+    "syncSeconds": 10
   }
 }

@@ -10,6 +10,7 @@
     "hub": "node packages/hub/server/index.js",
     "node": "node packages/node/server/index.js",
     "staff": "node packages/staff/server/index.js",
-    "check": "node --check packages/hub/server/index.js && node --check packages/node/server/index.js && node --check packages/staff/server/index.js"
+    "online": "node online/server/index.js",
+    "check": "node --check packages/hub/server/index.js && node --check packages/node/server/index.js && node --check packages/staff/server/index.js && node --check online/server/index.js"
   }
 }
